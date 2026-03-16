@@ -14,3 +14,6 @@ crucible = "forge_dashboard_crucible:CruciblePlugin"
 
 [tool.hatch.build.targets.wheel]
 packages = ["forge_dashboard_crucible"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
