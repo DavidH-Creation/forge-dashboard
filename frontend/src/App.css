@@ -1,0 +1,553 @@
+/* ===== App Shell ===== */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-nav__brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent) !important;
+  text-decoration: none !important;
+  letter-spacing: 0.5px;
+}
+
+.app-nav__links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.app-nav__links a {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.app-nav__links a:hover {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.app-main {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ===== Loading / Error ===== */
+.page-loading,
+.page-error {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+}
+.page-error {
+  color: var(--color-down);
+}
+
+/* ===== WS Indicator ===== */
+.ws-indicator {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.ws-indicator--connected {
+  background: rgba(105, 219, 124, 0.15);
+  color: var(--color-healthy);
+}
+.ws-indicator--disconnected {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--color-down);
+}
+
+/* ===== Overview ===== */
+.overview__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.health-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* ===== Health Card ===== */
+.health-card {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid;
+  border-radius: 8px;
+  padding: 1rem;
+  text-decoration: none !important;
+  transition: background 0.2s, transform 0.15s;
+}
+.health-card:hover {
+  background: var(--bg-secondary);
+  transform: translateY(-1px);
+}
+
+.health-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.health-card__name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.health-card__badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  color: #0f0f23;
+}
+
+.health-card__meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ===== Pipeline Graph ===== */
+.pipeline-graph {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem 0;
+  overflow-x: auto;
+}
+.pipeline-graph--compact {
+  padding: 0.5rem 0;
+}
+
+.pipeline-graph__segment {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pipeline-graph__node {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.pipeline-graph__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pipeline-graph__label {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.pipeline-graph__status-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.pipeline-graph__arrow {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  padding: 0 0.25rem;
+}
+
+/* ===== Event Feed ===== */
+.event-feed {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.event-feed--empty {
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.event-feed__title {
+  margin-bottom: 0.75rem;
+}
+
+.event-feed__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-feed__item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.825rem;
+}
+.event-feed__item:last-child {
+  border-bottom: none;
+}
+
+.event-feed__component {
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.event-feed__type {
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.event-feed__run {
+  font-family: var(--mono);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.event-feed__time {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* ===== Artifact Viewer ===== */
+.artifact-viewer {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.artifact-viewer__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.artifact-viewer__name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex: 1;
+}
+
+.artifact-viewer__format {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  background: var(--bg-primary);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.artifact-viewer__copy {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+.artifact-viewer__copy:hover {
+  color: var(--text-primary);
+}
+
+.artifact-viewer__code {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ===== Stage Progress ===== */
+.stage-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 1rem 0;
+  overflow-x: auto;
+}
+
+.stage-progress__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stage-progress__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  background: var(--bg-primary);
+}
+.stage-progress__dot--completed {
+  background: var(--color-healthy);
+  border-color: var(--color-healthy);
+}
+.stage-progress__dot--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+.stage-progress__label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.stage-progress__connector {
+  width: 2rem;
+  height: 2px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.stage-progress__connector--done {
+  background: var(--color-healthy);
+}
+
+/* ===== Data Table ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.data-table th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 2px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.data-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table__empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem !important;
+}
+
+.data-table__mono {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.data-table__link {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+/* ===== Status Badge ===== */
+.status-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+.status-badge--running,
+.status-badge--active {
+  background: rgba(116, 192, 252, 0.15);
+  color: var(--color-crucible);
+}
+.status-badge--completed,
+.status-badge--success,
+.status-badge--healthy {
+  background: rgba(105, 219, 124, 0.15);
+  color: var(--color-healthy);
+}
+.status-badge--failed,
+.status-badge--error,
+.status-badge--down {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--color-down);
+}
+.status-badge--pending,
+.status-badge--blocked,
+.status-badge--degraded {
+  background: rgba(255, 212, 59, 0.15);
+  color: var(--color-degraded);
+}
+
+/* ===== Progress Bar ===== */
+.progress-bar {
+  position: relative;
+  height: 18px;
+  background: var(--bg-primary);
+  border-radius: 9px;
+  overflow: hidden;
+  min-width: 80px;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 9px;
+  transition: width 0.3s;
+}
+
+.progress-bar__text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ===== Action Bar ===== */
+.action-bar {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg-primary);
+  text-decoration: none !important;
+  transition: opacity 0.2s;
+}
+.action-btn:hover {
+  opacity: 0.85;
+}
+.action-btn--secondary {
+  background: transparent;
+  color: var(--accent);
+}
+.action-btn--secondary:hover {
+  background: rgba(116, 192, 252, 0.1);
+}
+
+/* ===== Back Link ===== */
+.back-link {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-right: 1rem;
+}
+
+/* ===== Detail Grid ===== */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0.4rem 1rem;
+  margin: 0;
+}
+
+.detail-grid dt {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.detail-grid dd {
+  margin: 0;
+}
+
+/* ===== Run Detail ===== */
+.run-detail__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.run-detail__error {
+  color: var(--color-down);
+}
+
+.run-detail__info,
+.run-detail__stages,
+.run-detail__artifacts {
+  margin-bottom: 2rem;
+}
+
+/* ===== Component Detail ===== */
+.component-detail__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.component-detail__runs {
+  margin-top: 1rem;
+}
+
+/* ===== Pipeline Flow Page ===== */
+.pipeline-flow-page__graph {
+  margin-bottom: 2rem;
+}
+
+.pipeline-flow-page__table {
+  margin-top: 1rem;
+}
+
+/* ===== Overview sections ===== */
+.overview__pipeline,
+.overview__events,
+.overview__actions {
+  margin-bottom: 2rem;
+}
