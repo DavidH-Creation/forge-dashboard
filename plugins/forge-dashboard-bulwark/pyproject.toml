@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "forge-dashboard-bulwark"
+version = "0.1.0"
+description = "Bulwark plugin for Forge Dashboard"
+requires-python = ">=3.11"
+dependencies = ["forge-dashboard"]
+
+[project.entry-points."forge_dashboard.plugins"]
+bulwark = "forge_dashboard_bulwark:BulwarkPlugin"
+
+[tool.hatch.build.targets.wheel]
+packages = ["forge_dashboard_bulwark"]

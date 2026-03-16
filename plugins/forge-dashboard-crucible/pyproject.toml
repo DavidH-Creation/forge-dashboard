@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "forge-dashboard-crucible"
+version = "0.1.0"
+description = "Crucible plugin for Forge Dashboard"
+requires-python = ">=3.11"
+dependencies = ["forge-dashboard"]
+
+[project.entry-points."forge_dashboard.plugins"]
+crucible = "forge_dashboard_crucible:CruciblePlugin"
+
+[tool.hatch.build.targets.wheel]
+packages = ["forge_dashboard_crucible"]
