@@ -4,22 +4,30 @@ import { fetchRunDetail, fetchArtifacts } from '../hooks/useApi';
 import { StageProgress } from '../components/StageProgress';
 import { ArtifactViewer } from '../components/ArtifactViewer';
 
+interface StageRecord {
+  name: string;
+  status: string;
+  started_at?: string;
+  finished_at?: string;
+}
+
 interface RunInfo {
   run_id: string;
   component: string;
   status: string;
   progress: number;
   current_stage: string;
-  stages: string[];
+  stages: StageRecord[];
   started_at: string;
-  completed_at?: string;
-  error?: string;
+  finished_at?: string;
+  metadata?: Record<string, string>;
+  error?: string | null;
 }
 
 interface Artifact {
   name: string;
-  format: string;
-  content: string;
+  artifact_type: string;
+  content_or_path: string;
 }
 
 export function RunDetail() {
@@ -34,7 +42,7 @@ export function RunDetail() {
     Promise.all([fetchRunDetail(name, id), fetchArtifacts(name, id)])
       .then(([runData, artData]) => {
         setRun(runData);
-        setArtifacts(artData.artifacts ?? []);
+        setArtifacts(Array.isArray(artData) ? artData : []);
         setLoading(false);
       })
       .catch((err) => {
@@ -66,7 +74,7 @@ export function RunDetail() {
           &larr; Back to {name}
         </Link>
         <h1>
-          Run {run.run_id.slice(0, 8)}
+          Run {run.run_id}
         </h1>
         <span className={`status-badge status-badge--${run.status.toLowerCase()}`}>
           {run.status}
@@ -78,15 +86,21 @@ export function RunDetail() {
           <dt>Component</dt>
           <dd>{run.component}</dd>
           <dt>Progress</dt>
-          <dd>{run.progress}%</dd>
+          <dd>{Math.round(run.progress * 100)}%</dd>
           <dt>Started</dt>
           <dd>{new Date(run.started_at).toLocaleString()}</dd>
           <dt>Completed</dt>
           <dd>
-            {run.completed_at
-              ? new Date(run.completed_at).toLocaleString()
+            {run.finished_at
+              ? new Date(run.finished_at).toLocaleString()
               : 'In progress'}
           </dd>
+          {run.metadata?.task_contract_name && (
+            <>
+              <dt>Task</dt>
+              <dd>{run.metadata.task_contract_name}</dd>
+            </>
+          )}
           {run.error && (
             <>
               <dt>Error</dt>
@@ -111,8 +125,8 @@ export function RunDetail() {
             <ArtifactViewer
               key={art.name}
               name={art.name}
-              content={art.content}
-              format={art.format}
+              content={art.content_or_path}
+              format={art.artifact_type}
             />
           ))}
         </section>

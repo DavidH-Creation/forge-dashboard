@@ -141,19 +141,32 @@ class PluginRegistry:
 
     # ── Entry-point discovery ────────────────────────────────────────────
 
-    def discover_plugins(self) -> list[str]:
+    def discover_plugins(
+        self,
+        plugin_kwargs: dict[str, dict[str, Any]] | None = None,
+    ) -> list[str]:
         """Load plugins advertised via the ``forge_dashboard.plugins`` entry-point group.
+
+        Parameters
+        ----------
+        plugin_kwargs:
+            Optional mapping from entry-point name to keyword arguments passed
+            to the plugin constructor.  For example::
+
+                {"bulwark": {"repo_root": Path("/repos/my-project")}}
 
         Returns the names of newly registered plugins.
         """
         discovered: list[str] = []
+        kwargs_map = plugin_kwargs or {}
         eps = importlib.metadata.entry_points(group="forge_dashboard.plugins")
         for ep in eps:
             if ep.name in self._plugins:
                 continue
             try:
                 plugin_factory = ep.load()
-                plugin = plugin_factory()
+                kw = kwargs_map.get(ep.name, {})
+                plugin = plugin_factory(**kw)
                 self.register(plugin)
                 discovered.append(plugin.name)
             except Exception:

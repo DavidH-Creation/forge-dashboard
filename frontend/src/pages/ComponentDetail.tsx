@@ -8,7 +8,7 @@ interface Run {
   progress: number;
   current_stage: string;
   started_at: string;
-  completed_at?: string;
+  finished_at?: string;
 }
 
 export function ComponentDetail() {
@@ -21,7 +21,7 @@ export function ComponentDetail() {
     if (!name) return;
     fetchRuns(name)
       .then((data) => {
-        setRuns(data.runs ?? []);
+        setRuns(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch((err) => {
@@ -89,17 +89,17 @@ export function ComponentDetail() {
                       <div className="progress-bar">
                         <div
                           className="progress-bar__fill"
-                          style={{ width: `${run.progress}%` }}
+                          style={{ width: `${Math.round(run.progress * 100)}%` }}
                         />
                         <span className="progress-bar__text">
-                          {run.progress}%
+                          {Math.round(run.progress * 100)}%
                         </span>
                       </div>
                     </td>
                     <td>{new Date(run.started_at).toLocaleString()}</td>
                     <td>
-                      {run.completed_at
-                        ? new Date(run.completed_at).toLocaleString()
+                      {run.finished_at
+                        ? new Date(run.finished_at).toLocaleString()
                         : '-'}
                     </td>
                   </tr>

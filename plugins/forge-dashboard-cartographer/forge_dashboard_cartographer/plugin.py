@@ -47,8 +47,8 @@ class CartographerPlugin:
         StageDefinition(name=s, order=i) for i, s in enumerate(_CARTOGRAPHER_STAGES)
     ]
 
-    def __init__(self, repo_root: Path) -> None:
-        self._repo_root = Path(repo_root)
+    def __init__(self, repo_root: Path | None = None) -> None:
+        self._repo_root = Path(repo_root) if repo_root else Path(".")
         self._data_dir = self._repo_root / ".cartographer" / "runs"
         self._last_poll_time: float = 0.0
 

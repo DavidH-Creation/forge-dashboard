@@ -8,6 +8,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from forge_dashboard.config import DashboardConfig
 from forge_dashboard.platform.event_journal import EventJournal
 from forge_dashboard.platform.flow_tracker import FlowTracker
 from forge_dashboard.platform.operation_log import OperationLog
@@ -16,6 +17,16 @@ from forge_dashboard.plugin_sdk.registry import PluginRegistry
 from forge_dashboard.routers import components, operations, overview, pipeline, ws
 from forge_dashboard.services.aggregator import Aggregator
 from forge_dashboard.services.event_bus import EventBus
+
+
+def _build_plugin_kwargs(config: DashboardConfig) -> dict[str, dict]:
+    """Map DashboardConfig paths to per-plugin constructor kwargs."""
+    return {
+        "bulwark": {"repo_root": config.bulwark_root},
+        "cartographer": {"repo_root": config.cartographer_root},
+        "crossfire": {"work_dir": config.crossfire_root},
+        "crucible": {"repo_root": config.crucible_root},
+    }
 
 
 def create_app(
@@ -31,7 +42,8 @@ def create_app(
     auto_discover:
         If *True*, discover plugins via entry-points during startup.
     """
-    store = StateStore(db_path or Path(".forge-dashboard/state.db"))
+    config = DashboardConfig()
+    store = StateStore(db_path or config.db_path)
     registry = PluginRegistry()
     journal = EventJournal(store)
     op_log = OperationLog(store)
@@ -43,7 +55,7 @@ def create_app(
     async def lifespan(app: FastAPI):
         await store.init()
         if auto_discover:
-            registry.discover_plugins()
+            registry.discover_plugins(plugin_kwargs=_build_plugin_kwargs(config))
         await bus.start()
         yield
         await bus.stop()
@@ -74,3 +86,7 @@ def create_app(
     app.include_router(ws.router)
 
     return app
+
+
+# Module-level instance for ``uvicorn forge_dashboard.main:app``
+app = create_app()

@@ -91,6 +91,7 @@ class StateStore:
     async def init(self) -> None:
         """Open the database and ensure the schema exists."""
         if self._db is None:
+            self._db_path.parent.mkdir(parents=True, exist_ok=True)
             self._db = await aiosqlite.connect(self._db_path)
             self._db.row_factory = aiosqlite.Row
         await self._db.executescript(_SCHEMA_SQL)
