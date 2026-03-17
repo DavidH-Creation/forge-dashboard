@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import { useWebSocket } from './hooks/useWebSocket';
 import { Overview } from './pages/Overview';
 import { PipelineFlow } from './pages/PipelineFlow';
@@ -12,12 +12,16 @@ function AppShell() {
   return (
     <div className="app-shell">
       <nav className="app-nav">
-        <Link to="/" className="app-nav__brand">
+        <NavLink to="/" className="app-nav__brand" end>
           Forge
-        </Link>
+        </NavLink>
         <div className="app-nav__links">
-          <Link to="/">Overview</Link>
-          <Link to="/pipeline">Pipeline</Link>
+          <NavLink to="/" end className={({ isActive }) => isActive ? 'app-nav__link app-nav__link--active' : 'app-nav__link'}>
+            Overview
+          </NavLink>
+          <NavLink to="/pipeline" className={({ isActive }) => isActive ? 'app-nav__link app-nav__link--active' : 'app-nav__link'}>
+            Pipeline
+          </NavLink>
         </div>
       </nav>
       <main className="app-main">

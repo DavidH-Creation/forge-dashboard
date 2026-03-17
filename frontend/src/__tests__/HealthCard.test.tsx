@@ -32,7 +32,7 @@ describe('HealthCard', () => {
     );
 
     expect(screen.getByText('v4.0.0')).toBeInTheDocument();
-    expect(screen.getByText('7 recent runs')).toBeInTheDocument();
+    expect(screen.getByText('7 runs')).toBeInTheDocument();
   });
 
   it('links to component detail page', () => {

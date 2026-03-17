@@ -65,11 +65,14 @@ class CruciblePlugin:
     def _manifest_to_summary(self, data: dict) -> RunSummary:
         stage_runs = data.get("stage_runs", [])
         completed = sum(
-            1 for sr in stage_runs if sr.get("status") in ("complete", "done")
+            1
+            for sr in stage_runs
+            if sr.get("status") in ("complete", "completed", "done")
         )
         total = len(_CRUCIBLE_STAGES)
-        status = data.get("status", "unknown")
-        if status in ("complete", "done"):
+        # Accept both "status" and "overall_status" field names
+        status = data.get("status") or data.get("overall_status", "unknown")
+        if status in ("complete", "completed", "done"):
             progress = 1.0
         else:
             progress = completed / total if total else 0.0
@@ -88,9 +91,11 @@ class CruciblePlugin:
         stage_runs = data.get("stage_runs", [])
 
         # Build a lookup of stage_name -> stage run data
+        # Accept both "stage" and "stage_name" field names
         stage_lookup: dict[str, dict] = {}
         for sr in stage_runs:
-            stage_lookup[sr.get("stage_name", "")] = sr
+            key = sr.get("stage") or sr.get("stage_name", "")
+            stage_lookup[key] = sr
 
         stage_records: list[StageRecord] = []
         for stage_name in _CRUCIBLE_STAGES:
@@ -100,7 +105,7 @@ class CruciblePlugin:
                     name=stage_name,
                     status=sr.get("status", "pending"),
                     started_at=sr.get("started_at", ""),
-                    finished_at=sr.get("ended_at", ""),
+                    finished_at=sr.get("finished_at") or sr.get("ended_at", ""),
                 )
             )
 
@@ -178,15 +183,17 @@ class CruciblePlugin:
                 continue
             # Crucible generates retroactive events for each completed stage
             for sr in data.get("stage_runs", []):
-                if sr.get("status") in ("complete", "done"):
+                if sr.get("status") in ("complete", "completed", "done"):
+                    stage_key = sr.get("stage") or sr.get("stage_name", "")
+                    ts = sr.get("finished_at") or sr.get("ended_at", "")
                     events.append(
                         ComponentEvent(
                             component=self.name,
                             event_type="stage_completed",
                             run_id=data.get("run_id", entry.name),
-                            timestamp=sr.get("ended_at", ""),
+                            timestamp=ts,
                             data={
-                                "stage": sr.get("stage_name", ""),
+                                "stage": stage_key,
                                 "status": sr.get("status", ""),
                             },
                             is_retroactive=True,

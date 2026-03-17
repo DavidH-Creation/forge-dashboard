@@ -112,8 +112,8 @@ describe('Overview', () => {
       expect(screen.getByText('Quick Actions')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('New Pipeline')).toBeInTheDocument();
+    expect(screen.getByText('View Pipeline')).toBeInTheDocument();
     expect(screen.getByText('Retry Failed')).toBeInTheDocument();
-    expect(screen.getByText('View History')).toBeInTheDocument();
+    expect(screen.getByText('Flow History')).toBeInTheDocument();
   });
 });

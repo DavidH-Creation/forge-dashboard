@@ -29,6 +29,12 @@ node_modules/
 
 # Project-specific
 .forge-dashboard/
+.claude/
+
+# Demo data (for local testing)
+.bulwark/
+.cartographer/
+.crucible/
 
 # OS
 .DS_Store

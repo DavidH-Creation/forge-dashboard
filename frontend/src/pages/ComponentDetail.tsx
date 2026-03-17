@@ -2,6 +2,20 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchRuns } from '../hooks/useApi';
 
+const DISPLAY_NAMES: Record<string, string> = {
+  crucible: 'Crucible',
+  cartographer: 'Cartographer',
+  crossfire: 'Crossfire',
+  bulwark: 'Bulwark',
+};
+
+const COMPONENT_COLORS: Record<string, string> = {
+  crucible: '#74c0fc',
+  cartographer: '#b197fc',
+  crossfire: '#ffa94d',
+  bulwark: '#69db7c',
+};
+
 interface Run {
   run_id: string;
   status: string;
@@ -34,13 +48,19 @@ export function ComponentDetail() {
     return <div className="page-error">Component not specified</div>;
   }
 
+  const displayName = DISPLAY_NAMES[name.toLowerCase()] ?? name;
+  const accent = COMPONENT_COLORS[name.toLowerCase()] ?? '#868e96';
+
   return (
     <div className="component-detail">
       <header className="component-detail__header">
         <Link to="/" className="back-link">
           &larr; Back
         </Link>
-        <h1>{name}</h1>
+        <h1 style={{ color: accent }}>{displayName}</h1>
+        <span className="component-detail__count">
+          {runs.length} {runs.length === 1 ? 'run' : 'runs'}
+        </span>
       </header>
 
       <section className="component-detail__runs">
@@ -74,7 +94,7 @@ export function ComponentDetail() {
                         to={`/components/${name}/runs/${run.run_id}`}
                         className="data-table__link"
                       >
-                        {run.run_id.slice(0, 8)}
+                        {run.run_id}
                       </Link>
                     </td>
                     <td>
