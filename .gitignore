@@ -36,6 +36,9 @@ node_modules/
 .cartographer/
 .crucible/
 
+# Local frontend scaffold leftovers
+frontend/README.md
+
 # OS
 .DS_Store
 Thumbs.db
