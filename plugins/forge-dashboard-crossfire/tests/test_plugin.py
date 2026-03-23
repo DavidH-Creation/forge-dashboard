@@ -13,10 +13,10 @@ from forge_dashboard.plugin_sdk.protocol import ForgePlugin
 # ── Test helpers ─────────────────────────────────────────────────────────────
 
 
-def _write_crossfire_artifacts(work_dir: Path) -> None:
+def _write_crossfire_artifacts(work_dir: Path, run_id: str = "run-20240101-001") -> None:
     """Create realistic Crossfire spec and review artifact files."""
-    spec_dir = work_dir / "artifacts" / "spec"
-    review_dir = work_dir / "artifacts" / "review"
+    spec_dir = work_dir / "artifacts" / run_id / "spec"
+    review_dir = work_dir / "artifacts" / run_id / "review"
     spec_dir.mkdir(parents=True, exist_ok=True)
     review_dir.mkdir(parents=True, exist_ok=True)
 
@@ -57,13 +57,13 @@ class TestCrossfirePlugin:
         runs = await plugin.list_runs()
         assert len(runs) == 1
         assert runs[0].component == "crossfire"
-        assert runs[0].run_id == "current"
+        assert runs[0].run_id == "run-20240101-001"
         assert runs[0].status == "complete"
 
     async def test_get_artifacts(self, tmp_path: Path):
         _write_crossfire_artifacts(tmp_path)
         plugin = CrossfirePlugin(work_dir=tmp_path)
-        artifacts = await plugin.get_artifacts("current")
+        artifacts = await plugin.get_artifacts("run-20240101-001")
         assert len(artifacts) == 5
         spec_arts = [a for a in artifacts if a.artifact_type == "spec"]
         review_arts = [a for a in artifacts if a.artifact_type == "review"]
@@ -76,8 +76,8 @@ class TestCrossfirePlugin:
     async def test_get_run_detail(self, tmp_path: Path):
         _write_crossfire_artifacts(tmp_path)
         plugin = CrossfirePlugin(work_dir=tmp_path)
-        detail = await plugin.get_run("current")
-        assert detail.run_id == "current"
+        detail = await plugin.get_run("run-20240101-001")
+        assert detail.run_id == "run-20240101-001"
         assert detail.status == "complete"
         assert len(detail.stages) == 5
         for stage in detail.stages:
@@ -118,9 +118,23 @@ class TestCrossfirePlugin:
         for e in events:
             assert e.component == "crossfire"
             assert e.event_type == "artifact_created"
+            assert e.run_id == "run-20240101-001"
         # Poll again — no new events
         events = await plugin.poll_events()
         assert events == []
+
+    async def test_list_multiple_runs(self, tmp_path: Path):
+        _write_crossfire_artifacts(tmp_path, run_id="run-20240101-001")
+        _write_crossfire_artifacts(tmp_path, run_id="run-20240102-001")
+        plugin = CrossfirePlugin(work_dir=tmp_path)
+        runs = await plugin.list_runs()
+        assert len(runs) == 2
+        run_ids = [r.run_id for r in runs]
+        assert "run-20240101-001" in run_ids
+        assert "run-20240102-001" in run_ids
+        for r in runs:
+            assert r.component == "crossfire"
+            assert r.status == "complete"
 
     def test_satisfies_protocol(self, tmp_path: Path):
         plugin = CrossfirePlugin(work_dir=tmp_path)
