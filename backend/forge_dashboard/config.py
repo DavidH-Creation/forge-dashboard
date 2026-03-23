@@ -21,3 +21,5 @@ class DashboardConfig(BaseSettings):
     port: int = 8000
     log_level: str = "info"
     poll_interval: float = 2.0
+    api_key: str | None = None
+    cors_origins: list[str] = ["*"]

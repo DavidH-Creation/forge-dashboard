@@ -8,6 +8,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from forge_dashboard.auth import ApiKeyMiddleware
 from forge_dashboard.config import DashboardConfig
 from forge_dashboard.platform.event_journal import EventJournal
 from forge_dashboard.platform.flow_tracker import FlowTracker
@@ -32,6 +33,7 @@ def _build_plugin_kwargs(config: DashboardConfig) -> dict[str, dict]:
 def create_app(
     db_path: Path | None = None,
     auto_discover: bool = True,
+    config: DashboardConfig | None = None,
 ) -> FastAPI:
     """Build and return a fully-wired FastAPI application.
 
@@ -42,7 +44,7 @@ def create_app(
     auto_discover:
         If *True*, discover plugins via entry-points during startup.
     """
-    config = DashboardConfig()
+    config = config or DashboardConfig()
     store = StateStore(db_path or config.db_path)
     registry = PluginRegistry()
     journal = EventJournal(store)
@@ -64,10 +66,12 @@ def create_app(
     app = FastAPI(title="Forge Dashboard", lifespan=lifespan)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=config.cors_origins,
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    if config.api_key:
+        app.add_middleware(ApiKeyMiddleware, api_key=config.api_key)
 
     # Attach services to app.state so routers can access them via request.app.state
     app.state.store = store
