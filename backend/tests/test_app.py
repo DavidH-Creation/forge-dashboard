@@ -63,4 +63,4 @@ class TestAppFactory:
         async with AsyncClient(transport=transport, base_url="http://test") as client:
             resp = await client.get("/api/pipeline/flows")
             assert resp.status_code == 200
-            assert resp.json() == []
+            assert resp.json() == {"flows": []}

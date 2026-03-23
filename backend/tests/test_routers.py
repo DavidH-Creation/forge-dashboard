@@ -143,6 +143,40 @@ class TestOperationsRouter:
             )
             assert resp.status_code == 404
 
+    async def test_trigger_not_implemented_501(self, tmp_path):
+        class StubPlugin(MockPlugin):
+            async def trigger(self, params):
+                raise NotImplementedError
+
+        client, app = await _make_client(tmp_path, register_mock=False)
+        app.state.registry.register(StubPlugin())
+        async with client:
+            resp = await client.post("/api/components/mock/trigger", json={})
+            assert resp.status_code == 501
+            assert "not yet supported" in resp.json()["detail"]["error"]
+
+    async def test_cancel_not_implemented_501(self, tmp_path):
+        class StubPlugin(MockPlugin):
+            async def cancel(self, run_id):
+                raise NotImplementedError
+
+        client, app = await _make_client(tmp_path, register_mock=False)
+        app.state.registry.register(StubPlugin())
+        async with client:
+            resp = await client.delete("/api/components/mock/runs/r1")
+            assert resp.status_code == 501
+
+    async def test_retry_not_implemented_501(self, tmp_path):
+        class StubPlugin(MockPlugin):
+            async def retry(self, run_id):
+                raise NotImplementedError
+
+        client, app = await _make_client(tmp_path, register_mock=False)
+        app.state.registry.register(StubPlugin())
+        async with client:
+            resp = await client.post("/api/components/mock/runs/r1/retry")
+            assert resp.status_code == 501
+
 
 class TestPipelineRouter:
     async def test_list_flows(self, tmp_path):
@@ -150,7 +184,9 @@ class TestPipelineRouter:
         async with client:
             resp = await client.get("/api/pipeline/flows")
             assert resp.status_code == 200
-            assert isinstance(resp.json(), list)
+            data = resp.json()
+            assert "flows" in data
+            assert isinstance(data["flows"], list)
 
     async def test_get_events(self, tmp_path):
         client, _ = await _make_client(tmp_path)

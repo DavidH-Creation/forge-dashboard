@@ -10,7 +10,14 @@ router = APIRouter()
 @router.get("/pipeline/flows")
 async def list_flows(request: Request, limit: int = 20, offset: int = 0):
     """List pipeline flows, ordered by creation time descending."""
-    return await request.app.state.flow_tracker.list_flows(limit=limit, offset=offset)
+    rows = await request.app.state.flow_tracker.list_flows(limit=limit, offset=offset)
+    flows = [
+        {**{k: v for k, v in row.items() if k not in ("created_at", "finished_at")},
+         "started_at": row.get("created_at"),
+         "completed_at": row.get("finished_at")}
+        for row in rows
+    ]
+    return {"flows": flows}
 
 
 @router.get("/pipeline/flows/{flow_id}")
