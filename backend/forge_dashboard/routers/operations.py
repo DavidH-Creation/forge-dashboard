@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Request
+from forge_dashboard.plugin_sdk.registry import PluginCallError
 
 router = APIRouter()
 
@@ -14,9 +15,14 @@ async def trigger(request: Request, name: str):
     if not plugin:
         raise HTTPException(404, detail={"error": "ComponentNotFound"})
     body = await request.json()
-    run_id = await request.app.state.registry.safe_call(
-        plugin, "trigger", params=body
-    )
+    try:
+        run_id = await request.app.state.registry.safe_call(
+            plugin, "trigger", params=body
+        )
+    except PluginCallError as exc:
+        if isinstance(exc.cause, NotImplementedError):
+            raise HTTPException(501, detail={"error": "Operation not yet supported for this component"})
+        raise
     await request.app.state.op_log.record(
         component=name,
         operation="trigger",
@@ -33,9 +39,14 @@ async def cancel(request: Request, name: str, run_id: str):
     plugin = request.app.state.registry.get(name)
     if not plugin:
         raise HTTPException(404, detail={"error": "ComponentNotFound"})
-    result = await request.app.state.registry.safe_call(
-        plugin, "cancel", run_id=run_id
-    )
+    try:
+        result = await request.app.state.registry.safe_call(
+            plugin, "cancel", run_id=run_id
+        )
+    except PluginCallError as exc:
+        if isinstance(exc.cause, NotImplementedError):
+            raise HTTPException(501, detail={"error": "Operation not yet supported for this component"})
+        raise
     await request.app.state.op_log.record(
         component=name,
         operation="cancel",
@@ -52,9 +63,14 @@ async def retry(request: Request, name: str, run_id: str):
     plugin = request.app.state.registry.get(name)
     if not plugin:
         raise HTTPException(404, detail={"error": "ComponentNotFound"})
-    new_run_id = await request.app.state.registry.safe_call(
-        plugin, "retry", run_id=run_id
-    )
+    try:
+        new_run_id = await request.app.state.registry.safe_call(
+            plugin, "retry", run_id=run_id
+        )
+    except PluginCallError as exc:
+        if isinstance(exc.cause, NotImplementedError):
+            raise HTTPException(501, detail={"error": "Operation not yet supported for this component"})
+        raise
     await request.app.state.op_log.record(
         component=name,
         operation="retry",
