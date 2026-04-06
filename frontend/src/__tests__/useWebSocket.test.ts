@@ -16,7 +16,9 @@ class MockWebSocket {
     MockWebSocket.instances.push(this);
   }
 
-  send(_data: string) {}
+  send(data: string) {
+    void data;
+  }
   close() {}
 
   simulateOpen() {
