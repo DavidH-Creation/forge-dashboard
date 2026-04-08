@@ -1,0 +1,87 @@
+---
+source_file: "C:\Users\david\dev\forge-dashboard\backend\forge_dashboard\plugin_sdk\models.py"
+type: "code"
+community: "C: Users"
+location: "L70"
+tags:
+  - graphify/code
+  - graphify/INFERRED
+  - community/C:_Users
+---
+
+# ComponentEvent
+
+## Connections
+- [[A failing listener should not prevent other listeners from receiving events.]] - `uses` [INFERRED]
+- [[A minimal in-memory plugin that satisfies the ForgePlugin protocol.]] - `uses` [INFERRED]
+- [[An event emitted by (or on behalf of) a component.]] - `rationale_for` [EXTRACTED]
+- [[Append-only journal backed by the event_journal table.]] - `uses` [INFERRED]
+- [[BaseModel]] - `inherits` [EXTRACTED]
+- [[BulwarkPlugin]] - `uses` [INFERRED]
+- [[Cancel the background poll loop.]] - `uses` [INFERRED]
+- [[CartographerPlugin]] - `uses` [INFERRED]
+- [[Central event dispatcher. Periodically polls all healthy plugins for new]] - `uses` [INFERRED]
+- [[Connect to ws events, inject an event via bus._dispatch, receive it.]] - `uses` [INFERRED]
+- [[Continuously drain the queue and send events over the WebSocket.]] - `uses` [INFERRED]
+- [[CrossfirePlugin]] - `uses` [INFERRED]
+- [[CruciblePlugin]] - `uses` [INFERRED]
+- [[CruciblePlugin — reads Crucible run manifests from disk and exposes them via th]] - `uses` [INFERRED]
+- [[EventBus]] - `uses` [INFERRED]
+- [[EventBus — central event dispatcher that polls plugins and dispatches events.]] - `uses` [INFERRED]
+- [[EventJournal]] - `uses` [INFERRED]
+- [[EventJournal — persist and query ComponentEvents in SQLite.]] - `uses` [INFERRED]
+- [[Events for non-subscribed components should be filtered out.]] - `uses` [INFERRED]
+- [[FakePollPlugin]] - `uses` [INFERRED]
+- [[Forge Dashboard plugin for Bulwark task-execution runs.]] - `uses` [INFERRED]
+- [[Forge Dashboard plugin for Crossfire adversarial review sessions.]] - `uses` [INFERRED]
+- [[Forge Dashboard plugin for Crucible structured thinking runs.]] - `uses` [INFERRED]
+- [[ForgePlugin]] - `uses` [INFERRED]
+- [[ForgePlugin Protocol — the contract every component plugin must satisfy.]] - `uses` [INFERRED]
+- [[Infer the current stage from what artifacts exist.]] - `uses` [INFERRED]
+- [[Infer the overall run status from artifact directories.]] - `uses` [INFERRED]
+- [[Iterate all healthy plugins, call poll_events(since), record to journal, dispatc]] - `uses` [INFERRED]
+- [[Listeners can be added and removed.]] - `uses` [INFERRED]
+- [[Minimal plugin that yields pre-loaded events from poll_events.]] - `uses` [INFERRED]
+- [[MockPlugin]] - `uses` [INFERRED]
+- [[Persist a single event.]] - `uses` [INFERRED]
+- [[Query events with optional time and component filters.]] - `uses` [INFERRED]
+- [[Query events, truncating to max_replay_events most recent if exceeded.]] - `uses` [INFERRED]
+- [[Register a callback to receive dispatched events.]] - `uses` [INFERRED]
+- [[Return 0-based index of a stage, or 0 if not found.]] - `uses` [INFERRED]
+- [[Return a fresh MockPlugin instance.]] - `uses` [INFERRED]
+- [[Return all files in a directory (non-recursive).]] - `uses` [INFERRED]
+- [[Return all subdirectory names of artifacts_dir as run_ids (sorted by name).]] - `uses` [INFERRED]
+- [[Run poll_once in a loop until cancelled.]] - `uses` [INFERRED]
+- [[Runtime-checkable protocol that every Forge component plugin implements.]] - `uses` [INFERRED]
+- [[Send a replay message and receive replay_complete.]] - `uses` [INFERRED]
+- [[Send event to all listeners.]] - `uses` [INFERRED]
+- [[Shared fixtures for Forge Dashboard tests.]] - `uses` [INFERRED]
+- [[Start the background poll loop.]] - `uses` [INFERRED]
+- [[Stream component events to the client in real-time. Supports two client-t]] - `uses` [INFERRED]
+- [[Subscribe to specific components and only receive matching events.]] - `uses` [INFERRED]
+- [[TestArtifact]] - `uses` [INFERRED]
+- [[TestComponentEvent]] - `uses` [INFERRED]
+- [[TestEventBus]] - `uses` [INFERRED]
+- [[TestEventJournal]] - `uses` [INFERRED]
+- [[TestFlowStep]] - `uses` [INFERRED]
+- [[TestHealthStatus]] - `uses` [INFERRED]
+- [[TestPipelineFlow]] - `uses` [INFERRED]
+- [[TestRunDetail]] - `uses` [INFERRED]
+- [[TestRunSummary]] - `uses` [INFERRED]
+- [[TestStageDefinition]] - `uses` [INFERRED]
+- [[TestStageRecord]] - `uses` [INFERRED]
+- [[TestWebSocket]] - `uses` [INFERRED]
+- [[Tests for EventBus — central event dispatcher.]] - `uses` [INFERRED]
+- [[Tests for WebSocket endpoint ws events.]] - `uses` [INFERRED]
+- [[Tests for the EventJournal — persist and query events.]] - `uses` [INFERRED]
+- [[Unregister a previously registered callback.]] - `uses` [INFERRED]
+- [[WebSocket endpoint — real-time event streaming with replay support.]] - `uses` [INFERRED]
+- [[models.py]] - `contains` [EXTRACTED]
+- [[poll_once should collect events from healthy plugins, record them, and dispatch.]] - `uses` [INFERRED]
+- [[poll_once should dispatch all events from a plugin.]] - `uses` [INFERRED]
+- [[poll_once should not call poll_events on degraded plugins.]] - `uses` [INFERRED]
+- [[poll_once should poll events from all healthy plugins.]] - `uses` [INFERRED]
+- [[poll_once should update _last_poll_time after each poll.]] - `uses` [INFERRED]
+- [[start() should create a background task, stop() should cancel it.]] - `uses` [INFERRED]
+
+#graphify/code #graphify/INFERRED #community/C:_Users
